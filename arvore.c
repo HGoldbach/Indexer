@@ -76,46 +76,34 @@ Arvore* arv_insere(Arvore* a, char* c) {
     return a;
 }
 
-
-// Função para ordenar os termos da árvore com base na quantidade de ocorrências
-void arv_ordena(Arvore* a, int N, int arr[], char* str[]) {
+void arv_ordena(Arvore* a, int N, int ocorrencia_arr[], char* palavra_arr[]) {
     if (verifica_arv_vazia(a)) {
         return;
-    } else {
-        arv_ordena(a->esq, N, arr, str);
     }
 
-    if (a->ocorrencia > arr[N - 1]) {
-        // Se a quantidade de ocorrências é maior que a menor quantidade na lista ordenada
-        int x = 0;
-        int y;
-        char* c;
+    arv_ordena(a->esq, N, ocorrencia_arr, palavra_arr);
+
+    // Verifica se a ocorrência atual é maior do que a menor ocorrência na lista ordenada
+    if (a->ocorrencia > ocorrencia_arr[N - 1]) {
+        int i = N - 1;
 
         // Encontra a posição correta para inserir o termo na lista ordenada
-        while (arr[x] >= a->ocorrencia) {
-            x++;
+        while (i > 0 && a->ocorrencia > ocorrencia_arr[i - 1]) {
+            i--;
         }
 
-        // Insere o termo na posição correta da lista ordenada
-        for (int i = x; i < N; i++) {
-            for (int j = i + 1; j < N; j++) {
-                if (arr[i] < arr[j]) {
-                    y = arr[i];
-                    c = str[i];
-
-                    arr[i] = arr[j];
-                    str[i] = str[j];
-
-                    arr[j] = y;
-                    str[j] = c;
-                }
-            }
+        // Desloca os elementos para abrir espaço para o novo termo
+        for (int j = N - 1; j > i; j--) {
+            ocorrencia_arr[j] = ocorrencia_arr[j - 1];
+            palavra_arr[j] = palavra_arr[j - 1];
         }
 
-        arr[x] = a->ocorrencia;
-        str[x] = a->info;
+        // Insere o novo termo na posição correta da lista ordenada
+        ocorrencia_arr[i] = a->ocorrencia;
+        palavra_arr[i] = a->info;
     }
-    arv_ordena(a->dir, N, arr, str);
+
+    arv_ordena(a->dir, N, ocorrencia_arr, palavra_arr);
 }
 
 Arvore* arv_libera(Arvore* a) {

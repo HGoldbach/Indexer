@@ -21,8 +21,8 @@ int main(int argc, char* argv[]) {
     if (strcmp(argv[1], "--freq") == 0) {
         n_palavras = atoi(argv[2]);
         FILE* file = fopen(argv[3], "r+");
-        int ocorrencia[n_palavras];
-        char* palavra_arr[n_palavras + 1];
+        int ocorrencia_arr[n_palavras];
+        char* palavra_arr[n_palavras];
 
         // Verifica se o arquivo foi aberto
         if (file == NULL) {
@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
             char* palavra;
             printf("\nLeitura do arquivo em andamento, por favor aguarde\n");
 			
-            // Lê as palavras do arquivo e os insere na árvore
+            // Lê as palavras do arquivo e as insere na árvore
             do {
 				palavra = obterPalavra(file);
 				if (palavra && strlen(palavra) > 2) {
@@ -46,18 +46,16 @@ int main(int argc, char* argv[]) {
 
         // Inicializa o array ocorrencia com zeros
         for (int i = 0; i < n_palavras; i++) {
-            ocorrencia[i] = 0;
+            ocorrencia_arr[i] = 0;
         }
 
-        // Ordena os termos na árvore e os armazena nos arrays termos_qtd e termos_str
-        arv_ordena(a, n_palavras, ocorrencia, palavra_arr);
+        // Ordena os termos na árvore e os armazena nos arrays
+        arv_ordena(a, n_palavras, ocorrencia_arr, palavra_arr);
 
         // Imprime os termos mais frequentes
 		printf("\nPalavra\t\t| Aparicoes\n------------------------------");
         for (int i = 0; i < n_palavras; i++) {
-            if (ocorrencia[i] > 0) {
-                printf("\n%s\t\t| %d\n------------------------------", palavra_arr[i], ocorrencia[i]);
-            }
+            printf("\n%s\t\t| %d\n------------------------------", palavra_arr[i], ocorrencia_arr[i]);
         }
         printf("\n");
 
@@ -87,7 +85,6 @@ int main(int argc, char* argv[]) {
     } else if (strcmp(argv[1], "--search") == 0) {
 
         int qtde_arquivos = argc - 3;
-        int count = 0;
         double TF[qtde_arquivos]; // Term Frequency - (Número de vezes que a palavra aparece no arquivo) / (Total de palavras no arquivo)
         double IDF; // Inverse Document Frequency - log[ (Número de Documentos) / (Número de documentos em que a palavra está presente) ]
         double TFIDF[qtde_arquivos]; // TF * IDF
@@ -148,7 +145,6 @@ int main(int argc, char* argv[]) {
                 break;
             } else {
                 IDF = log10((double)qtde_arquivos / count); 
-                printf("\nCount = %d", count);
                 printf("\n\nIDF = %.10f", IDF);
 
                 if(IDF == 0) {
