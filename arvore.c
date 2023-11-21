@@ -20,7 +20,6 @@ int verifica_arv_vazia(Arvore* a) {
     return (a == NULL);
 }
 
-
 // Função para obter a próxima palavra do arquivo
 char* obterPalavra(FILE *file) {
     char c;
@@ -103,7 +102,6 @@ void arv_imprime_inordem(Arvore* a) {
         printf("%s: %d\n", a->info, a->ocorrencia);
         arv_imprime_inordem(a->dir);
     }
-    return NULL;
 }
 
 // Função para imprimir a árvore preordem (da raiz)
@@ -113,7 +111,6 @@ void arv_imprime_preordem(Arvore* a) {
         arv_imprime_preordem(a->esq);
         arv_imprime_preordem(a->dir);
     }
-    return NULL
 }
 
 

@@ -63,7 +63,6 @@ int main(int argc, char* argv[]) {
     // Verifica se a opção selecionada é --freq
     if (strcmp(argv[1], "--freq") == 0) {
         n_palavras = atoi(argv[2]);
-        FILE* file = fopen(argv[3], "r+");
         int ocorrencia_arr[n_palavras];
         char* palavra_arr[n_palavras];
 
@@ -202,14 +201,14 @@ int main(int argc, char* argv[]) {
         for (int i = 0; i < qtde_arquivos; i++) {
             arv_libera(arvores[i]);  
         }
-        free(arvores); 
+        free(arvores);
         exit(0);
     } else {
 		erroEncerrarPrograma("Tipo incorreto de argumentos");
     }
 
     // Libera a memória alocada para a árvore antes de sair
+    free(arvores);
     arv_libera(a); 
-    free(arvores); 
     exit(0);
 }
