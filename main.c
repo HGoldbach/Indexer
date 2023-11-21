@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
 
             // Lê as palavras do arquivo e insere na árvore se tiver mais de 2 caracteres
             while ((palavra = obterPalavra(file)) != NULL) {
-                if (strlen(palavra) > 2) {
+                if (strlen(palavra) >= 2) {
                     a = arv_insere(a, palavra);
                 }
             }
@@ -41,16 +41,16 @@ int main(int argc, char* argv[]) {
             total_palavras[i] = 0;
         }
 
+        printf("\nLeitura dos arquivos em andamento, por favor aguarde\n");
         // Para cada arquivo, abre e lê as palavras, inserindo na árvore correspondente
         for (int i = 0; i < qtde_arquivos; i++) {
             FILE* file = fopen(argv[i+3], "r+");
-            printf("\nLeitura dos arquivos em andamento, por favor aguarde\n");
             if (file == NULL) {
                 erroEncerrarPrograma("Erro ao tentar abrir o arquivo!");
             } else {
                 char* palavra;
                 while ((palavra = obterPalavra(file)) != NULL) {
-                    if (strlen(palavra) > 2) {
+                    if (strlen(palavra) >= 2) {
                         arvores[i] = arv_insere(arvores[i], palavra);
                     }
                     total_palavras[i]++;
@@ -90,7 +90,6 @@ int main(int argc, char* argv[]) {
 
     } else if (strcmp(argv[1], "--search") == 0) {
 
-        int qtde_arquivos = argc - 3;
         int count = 0;
         double TF[qtde_arquivos]; // Term Frequency - (Número de vezes que a palavra aparece no arquivo) / (Total de palavras no arquivo)
         double IDF; // Inverse Document Frequency - log[ (Número de Documentos) / (Número de documentos em que a palavra está presente) ]

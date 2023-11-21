@@ -21,8 +21,11 @@ Arvore* arv_insere(Arvore* a, char* c);
 // Ordena a árvore e armazena os termos e ocorrências nos arrays fornecidos
 void arv_ordena(Arvore* a, int N, int ocorrencia_arr[], char* palavra_arr[]);
 
-// Imprime a árvore
-void arv_imprime(Arvore* a);
+// Imprime a árvore inordem (ordem crescente)
+void arv_imprime_inordem(Arvore* a);
+
+// Imprime a árvore preordem (da raiz)
+void arv_imprime_preordem(Arvore* a);
 
 // Libera a memória alocada para a árvore
 Arvore* arv_libera(Arvore* a);

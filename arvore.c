@@ -20,10 +20,11 @@ int verifica_arv_vazia(Arvore* a) {
     return (a == NULL);
 }
 
+
 // Função para obter a próxima palavra do arquivo
 char* obterPalavra(FILE *file) {
     char c;
-    char palavra[100];
+    char palavra[80];
     int i = 0;
 
     // Ignora caracteres não alfabéticos
@@ -50,6 +51,7 @@ char* obterPalavra(FILE *file) {
     // Retorna uma cópia alocada dinamicamente do termo
     return strdup(palavra);
 }
+
 
 // Função para inserir um termo na árvore
 Arvore* arv_insere(Arvore* a, char* palavra) {
@@ -94,17 +96,26 @@ int arv_busca(Arvore* a, char* palavra) {
     }
 }
 
-// Função para imprimir a árvore
-void arv_imprime(Arvore* a) {
-    if (verifica_arv_vazia(a)) {
-        return;
+// Função para imprimir a árvore inordem (ordem crescente)
+void arv_imprime_inordem(Arvore* a) {
+    if (!verifica_arv_vazia(a)) {
+        arv_imprime_inordem(a->esq);
+        printf("%s: %d\n", a->info, a->ocorrencia);
+        arv_imprime_inordem(a->dir);
     }
-
-    // Visita os nós da árvore em ordem
-    arv_imprime(a->esq);
-    printf("%s: %d\n", a->info, a->ocorrencia);
-    arv_imprime(a->dir);
+    return NULL;
 }
+
+// Função para imprimir a árvore preordem (da raiz)
+void arv_imprime_preordem(Arvore* a) {
+    if (!verifica_arv_vazia(a)) {
+        printf("%s: %d\n", a->info, a->ocorrencia);
+        arv_imprime_preordem(a->esq);
+        arv_imprime_preordem(a->dir);
+    }
+    return NULL
+}
+
 
 // Função para ordenar a árvore e armazenar os termos e ocorrências nos arrays fornecidos
 void arv_ordena(Arvore* a, int n_palavras, int ocorrencia_arr[], char* palavra_arr[]) {
