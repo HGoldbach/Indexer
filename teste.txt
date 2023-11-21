@@ -1,5 +1,3 @@
 and and and and 
 the the the the the 
-fast fast fast 
-first first first first first first first
-test test test test test test test test test test test test
+fast fast fast

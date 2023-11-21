@@ -6,7 +6,10 @@ typedef struct arvore {
     struct arvore *dir;
 } Arvore;
 
+// Cria uma arvore vazia
 Arvore* cria_arv_vazia(void);
+
+// Verifica se a arvore está vazia
 int verifica_arv_vazia(Arvore* a);
 
 // Obtém um termo do arquivo
@@ -15,10 +18,14 @@ char* obterPalavra(FILE *file);
 // Insere um termo na árvore
 Arvore* arv_insere(Arvore* a, char* c);
 
-// Ordena a árvore
-void arv_ordena(Arvore* a, int N, int arr[], char* str[]);
+// Ordena a árvore e armazena os termos e ocorrências nos arrays fornecidos
+void arv_ordena(Arvore* a, int N, int ocorrencia_arr[], char* palavra_arr[]);
 
 // Imprime a árvore
 void arv_imprime(Arvore* a);
 
+// Libera a memória alocada para a árvore
 Arvore* arv_libera(Arvore* a);
+
+// Busca na árvore por uma palavra e retorna o número de ocorrências
+int arv_busca(Arvore* a, char* palavra);

@@ -26,7 +26,7 @@ char* obterPalavra(FILE *file) {
     char palavra[100];
     int i = 0;
 
-    // Ignora caracteres não alfabéticos até encontrar um caractere alfabético
+    // Ignora caracteres não alfabéticos
     c = fgetc(file);
     while (c != EOF && !isalpha(c)) {
         c = fgetc(file);
@@ -38,11 +38,11 @@ char* obterPalavra(FILE *file) {
     }
 
     // Lê o termo e converte para minúsculas
-    do {
+    while (c != EOF && isalpha(c)) {
         palavra[i] = tolower(c);
         i++;
         c = fgetc(file);
-    } while (c != EOF && isalpha(c));
+    }
 
     // Adiciona o caractere nulo ao final do termo
     palavra[i] = '\0';
@@ -52,7 +52,7 @@ char* obterPalavra(FILE *file) {
 }
 
 // Função para inserir um termo na árvore
-Arvore* arv_insere(Arvore* a, char* c) {
+Arvore* arv_insere(Arvore* a, char* palavra) {
     if (verifica_arv_vazia(a)) {
         // Se o nó não existe, aloca memória para a árvore
         a = (Arvore*)malloc(sizeof(Arvore));
@@ -60,15 +60,18 @@ Arvore* arv_insere(Arvore* a, char* c) {
         if (verifica_arv_vazia(a)) {
             erroEncerrarPrograma("Erro durante a alocação de memória");
         }
-        a->info = c;
+        a->info = strdup(palavra);
+        if (a->info == NULL) {
+            erroEncerrarPrograma("Erro durante a alocação de memória para a palavra");
+        }
         a->ocorrencia = 1;
         a->esq = a->dir = NULL;
-    } else if (strcmp(c, a->info) < 0) {
+    } else if (strcmp(palavra, a->info) < 0) {
         // Se o termo é menor, insere à esquerda
-        a->esq = arv_insere(a->esq, c);
-    } else if (strcmp(c, a->info) > 0) {
+        a->esq = arv_insere(a->esq, palavra);
+    } else if (strcmp(palavra, a->info) > 0) {
         // Se o termo é maior, insere à direita
-        a->dir = arv_insere(a->dir, c);
+        a->dir = arv_insere(a->dir, palavra);
     } else {
         // Se o termo já existe, incrementa a quantidade
         a->ocorrencia++;
@@ -76,16 +79,44 @@ Arvore* arv_insere(Arvore* a, char* c) {
     return a;
 }
 
-void arv_ordena(Arvore* a, int N, int ocorrencia_arr[], char* palavra_arr[]) {
+// Função para buscar uma palavra e retornar o número de ocorrências
+int arv_busca(Arvore* a, char* palavra) {
+    if (verifica_arv_vazia(a)) {
+        return 0;
+    }
+
+    if (strcmp(palavra, a->info) == 0) {
+        return a->ocorrencia;
+    } else if(strcmp(palavra, a->info) < 0) {
+        return arv_busca(a->esq, palavra);
+    } else {
+        return arv_busca(a->dir, palavra);
+    }
+}
+
+// Função para imprimir a árvore
+void arv_imprime(Arvore* a) {
     if (verifica_arv_vazia(a)) {
         return;
     }
 
-    arv_ordena(a->esq, N, ocorrencia_arr, palavra_arr);
+    // Visita os nós da árvore em ordem
+    arv_imprime(a->esq);
+    printf("%s: %d\n", a->info, a->ocorrencia);
+    arv_imprime(a->dir);
+}
+
+// Função para ordenar a árvore e armazenar os termos e ocorrências nos arrays fornecidos
+void arv_ordena(Arvore* a, int n_palavras, int ocorrencia_arr[], char* palavra_arr[]) {
+    if (verifica_arv_vazia(a)) {
+        return;
+    }
+
+    arv_ordena(a->esq, n_palavras, ocorrencia_arr, palavra_arr);
 
     // Verifica se a ocorrência atual é maior do que a menor ocorrência na lista ordenada
-    if (a->ocorrencia > ocorrencia_arr[N - 1]) {
-        int i = N - 1;
+    if (a->ocorrencia > ocorrencia_arr[n_palavras - 1]) {
+        int i = n_palavras - 1;
 
         // Encontra a posição correta para inserir o termo na lista ordenada
         while (i > 0 && a->ocorrencia > ocorrencia_arr[i - 1]) {
@@ -93,7 +124,7 @@ void arv_ordena(Arvore* a, int N, int ocorrencia_arr[], char* palavra_arr[]) {
         }
 
         // Desloca os elementos para abrir espaço para o novo termo
-        for (int j = N - 1; j > i; j--) {
+        for (int j = n_palavras - 1; j > i; j--) {
             ocorrencia_arr[j] = ocorrencia_arr[j - 1];
             palavra_arr[j] = palavra_arr[j - 1];
         }
@@ -103,9 +134,10 @@ void arv_ordena(Arvore* a, int N, int ocorrencia_arr[], char* palavra_arr[]) {
         palavra_arr[i] = a->info;
     }
 
-    arv_ordena(a->dir, N, ocorrencia_arr, palavra_arr);
+    arv_ordena(a->dir, n_palavras, ocorrencia_arr, palavra_arr);
 }
 
+// Função para liberar a memória alocada para a árvore
 Arvore* arv_libera(Arvore* a) {
     if(!verifica_arv_vazia(a)) {
         arv_libera(a->esq);
