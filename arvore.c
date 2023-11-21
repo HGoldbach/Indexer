@@ -21,36 +21,51 @@ int verifica_arv_vazia(Arvore* a) {
 }
 
 // Função para obter a próxima palavra do arquivo
-char* obterPalavra(FILE *file) {
-    char c;
-    char palavra[80];
-    int i = 0;
+char* obter_palavra(FILE *file) {
+    int tamanho = 0;
+    int capacidade = 50;
+    char* palavra = (char*)malloc(capacidade * sizeof(char));
+
+    if (palavra == NULL) {
+        erroEncerrarPrograma("Erro durante a alocação de memória");
+    }
+
+    int c = fgetc(file);
 
     // Ignora caracteres não alfabéticos
-    c = fgetc(file);
     while (c != EOF && !isalpha(c)) {
         c = fgetc(file);
     }
 
     // Se o final do arquivo for alcançado, retorna NULL indicando que não há mais termos
     if (c == EOF) {
+        free(palavra);
         return NULL;
     }
 
     // Lê o termo e converte para minúsculas
-    while (c != EOF && isalpha(c)) {
-        palavra[i] = tolower(c);
-        i++;
+    do {
+        palavra[tamanho++] = tolower(c);
+
+        // Se atingiu a capacidade máxima, realoca o dobro do tamanho
+        if (tamanho == capacidade) {
+            capacidade *= 2;
+            palavra = (char*)realloc(palavra, capacidade * sizeof(char));
+
+            if (palavra == NULL) {
+                erroEncerrarPrograma("Erro durante a alocação de memória");
+            }
+        }
+
         c = fgetc(file);
-    }
+    } while (c != EOF && isalpha(c));
 
     // Adiciona o caractere nulo ao final do termo
-    palavra[i] = '\0';
+    palavra[tamanho] = '\0';
 
-    // Retorna uma cópia alocada dinamicamente do termo
-    return strdup(palavra);
+    // Retorna a palavra
+    return palavra;
 }
-
 
 // Função para inserir um termo na árvore
 Arvore* arv_insere(Arvore* a, char* palavra) {

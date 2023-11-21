@@ -26,10 +26,11 @@ int main(int argc, char* argv[]) {
             printf("\nLeitura do arquivo em andamento, por favor aguarde\n");
 
             // Lê as palavras do arquivo e insere na árvore se tiver mais de 2 caracteres
-            while ((palavra = obterPalavra(file)) != NULL) {
+            while ((palavra = obter_palavra(file)) != NULL) {
                 if (strlen(palavra) >= 2) {
                     a = arv_insere(a, palavra);
                 }
+                free(palavra);
             }
         }
         fclose(file);
@@ -49,10 +50,11 @@ int main(int argc, char* argv[]) {
                 erroEncerrarPrograma("Erro ao tentar abrir o arquivo!");
             } else {
                 char* palavra;
-                while ((palavra = obterPalavra(file)) != NULL) {
+                while ((palavra = obter_palavra(file)) != NULL) {
                     if (strlen(palavra) >= 2) {
                         arvores[i] = arv_insere(arvores[i], palavra);
                     }
+                    free(palavra);
                     total_palavras[i]++;
                 }
             }
@@ -165,7 +167,7 @@ int main(int argc, char* argv[]) {
             // Imprime a relevância da palavara nos arquivos
             printf("\n\nRelevância da palavra %s para os arquivos\n", palavras);
             for (int i = 0; i < qtde_arquivos; i++) {
-                printf("%s\tTFIDF = %.10f\n", nome_arquivo[i],TFIDF[i]);
+                printf("%s%-5s\tTFIDF = %.10f\n", nome_arquivo[i],"",TFIDF[i]);
             }
             
             // Obtém a próxima palavra
