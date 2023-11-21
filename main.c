@@ -202,12 +202,14 @@ int main(int argc, char* argv[]) {
         for (int i = 0; i < qtde_arquivos; i++) {
             arv_libera(arvores[i]);  
         }
+        free(arvores); 
         exit(0);
     } else {
 		erroEncerrarPrograma("Tipo incorreto de argumentos");
     }
 
     // Libera a memória alocada para a árvore antes de sair
-    arv_libera(a);  
+    arv_libera(a); 
+    free(arvores); 
     exit(0);
 }
