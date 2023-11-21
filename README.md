@@ -19,10 +19,12 @@ Dentro da pasta um arquivo executável com o nome de indexer será criado.
 -  --freq N ARQUIVO
     Exibe o número de ocorrência das N palavras que mais aparecem em ARQUIVO, em
     ordem decrescente de ocorrência.
+   
     **Exemplo de uso: ./indexer --freq 5 103.txt**
 
 -  --freq-word PALAVRA ARQUIVO
-    Exibe o número de ocorrências de PALAVRA em ARQUIVO. 
+    Exibe o número de ocorrências de PALAVRA em ARQUIVO.
+   
     **Exemplo de uso: ./indexer --freq-word project 103.txt**
 
 -  --search TERMO ARQUIVO [ARQUIVO ...]
@@ -30,6 +32,7 @@ Dentro da pasta um arquivo executável com o nome de indexer será criado.
     TERMO. A listagem é apresentada em ordem descrescente de relevância. 
     TERMO pode conter mais de uma palavra. Neste caso, deve ser indicado entre 
     àspas.
+   
     **Exemplo de uso: ./indexer --search 'the was' 103.txt 128mb.txt**
 
 ## Funcionalidades do Programa
